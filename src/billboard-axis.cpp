@@ -23,6 +23,7 @@ public:
 
     Image img;
     img.load("../textures/tree.png", true);
+    treeR = float(float(img.height()) / float(img.width()));
     renderer.loadTexture("tree", img, 0);
     // TODO: Use the width and the height of the image to scale the billboard
 
@@ -31,17 +32,40 @@ public:
   }
 
 
-  void mouseMotion(int x, int y, int dx, int dy) {
-  }
+   void mouseMotion(int x, int y, int dx, int dy) {
+      if (MDown)
+      {
+         // Azimuth and Elevation are updated via mouse
+         Azimuth -= dx * 0.05f;
+         Elevation += dy * 0.05f;
+         
 
-  void mouseDown(int button, int mods) {
-  }
+         eyePos = vec3(
+            Radius * sin(Azimuth) * cos(Elevation), 
+            Radius * sin(Elevation), 
+            Radius * cos(Azimuth) * cos(Elevation)
+         );
+      }
+   }
 
-  void mouseUp(int button, int mods) {
-  }
+   void mouseDown(int button, int mods) {
+      MDown = true;
+   }
 
-  void scroll(float dx, float dy) {
-  }
+   void mouseUp(int button, int mods) {
+      MDown = false;
+   }
+
+   void scroll(float dx, float dy) {
+      // Scrolling directly affects radius (zoom)
+      Radius += dy * 0.05f;
+
+      eyePos = vec3(
+         Radius * sin(Azimuth) * cos(Elevation), 
+         Radius * sin(Elevation), 
+         Radius * cos(Azimuth) * cos(Elevation)
+      );
+   }
 
   void draw() {
     renderer.beginShader("simple-texture");
@@ -61,6 +85,9 @@ public:
     // draw tree
     renderer.texture("Image", "tree");
     renderer.push();
+    renderer.rotate(Azimuth, vec3(0, 1.0, 0));
+    renderer.scale(vec3(1.0, treeR, 1.0));
+    renderer.translate(vec3(0.0, 0.215, 0.0));
     renderer.translate(vec3(-0.5, -0.5, 0));
     renderer.quad(); // vertices span from (0,0,0) to (1,1,0)
     renderer.pop();
@@ -73,6 +100,11 @@ protected:
   vec3 eyePos = vec3(0, 0, 2);
   vec3 lookPos = vec3(0, 0, 0);
   vec3 up = vec3(0, 1, 0);
+  bool MDown = false;
+  float Elevation = 0.0f;
+  float Azimuth = 0.0f;
+  float Radius = 10.0f;
+  float treeR = 0.0;
 };
 
 int main(int argc, char** argv)

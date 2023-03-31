@@ -46,10 +46,10 @@ public:
     renderer.texture("image", "explosion");
 
     // 30 fps => each frame 1/30 long, e.g. when time = 1s, we play frame 30
-    frame = 0;
     renderer.setUniform("Frame", frame);
     renderer.setUniform("Rows", numRows);
     renderer.setUniform("Cols", numCols);
+    renderer.setUniform("Time", elapsedTime());
 
     float aspect = ((float)width()) / height();
     renderer.perspective(glm::radians(60.0f), aspect, 0.1f, 50.0f);
@@ -57,6 +57,7 @@ public:
     renderer.lookAt(eyePos, lookPos, up);
     renderer.sprite(vec3(0.0), vec4(1.0f), 1.0);
 
+    frame++;
     renderer.endShader();
   }
 
