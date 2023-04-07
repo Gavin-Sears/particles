@@ -81,7 +81,7 @@ endif()
 include_directories(${INCLUDE_DIRS})
 link_directories(${LIBRARY_DIRS})
 
-file(GLOB SOURCES "src/agl/*.h" "src/agl/*.cpp" "src/agl/mesh/*.h" "src/agl/mesh/*.cpp") 
+file(GLOB SOURCES "src/agl/*.h" "src/agl/*.cpp" "src/agl/mesh/*.h" "src/agl/mesh/*.cpp" "src/plymesh.cpp" "src/plymesh.h") 
 
 set(SHADERS
     shaders/billboard-animated.fs
@@ -102,6 +102,9 @@ target_link_libraries(explosion ${CORE})
 
 add_executable(billboard-axis src/billboard-axis.cpp ${SOURCES} ${SHADERS})
 target_link_libraries(billboard-axis ${CORE})
+
+add_executable(demo src/demo.cpp ${SOURCES} ${SHADERS})
+target_link_libraries(demo ${CORE})
 
 if (WIN32)
   source_group("shaders" FILES ${SHADERS})
