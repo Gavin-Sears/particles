@@ -28,6 +28,7 @@ public:
   void setup() {
     setWindowSize(1000, 1000);
     duckMesh.load("../models/rubberDucky.ply");
+    gnomeMesh.load("../models/gnome.ply");
     createDuckies(10);
     createConfetti(10);
     renderer.loadShader("simple-texture",
@@ -38,6 +39,7 @@ public:
 
     renderer.loadTexture("grass", "../textures/grass.png", 0);
     renderer.loadTexture("ducky", "../textures/duck_texture.png", 0);
+    renderer.loadTexture("gnome3", "../textures/gnome3.png", 0);
     renderer.loadTexture("particle", "../textures/star4.png", 0);
     renderer.blendMode(agl::BLEND);
   }
@@ -125,7 +127,7 @@ public:
     for (int i = 0; i < mParticles.size(); i++)
     {
       Particle particle = mParticles[i];
-      renderer.texture("image", "particle");
+      renderer.texture("Image", "particle");
       renderer.push();
       renderer.rotate(Azimuth, vec3(0.0f, 1.0f, 0.0f));
       renderer.translate(particle.pos);
@@ -186,6 +188,11 @@ public:
     renderer.sphere();
     renderer.pop();
     renderer.push();
+    renderer.translate(vec3(-0.35f, -0.25f, 0.0f));
+    renderer.texture("Image", "gnome3");
+    renderer.mesh(gnomeMesh);
+    renderer.pop();
+
 
     updateDuckies(dt());
     drawDuckies();
@@ -205,10 +212,11 @@ protected:
   float Azimuth = 0.0f;
   float Radius = 10.0f;
 
-  vec3 dizzyPos = vec3(0.0f, 2.0f, 0.0f);
+  vec3 dizzyPos = vec3(0.0f, 2.5f, 0.0f);
   float dizzyRad = 1.0f;
 
   PLYMesh duckMesh;
+  PLYMesh gnomeMesh;
 
   std::vector<Particle> mDuckies;
   std::vector<Particle> mParticles;
